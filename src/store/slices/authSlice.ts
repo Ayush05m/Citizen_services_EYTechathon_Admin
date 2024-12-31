@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '@/services/api';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import api from "@/services/api";
 
 interface AuthState {
   token: string | null;
@@ -9,29 +9,29 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  token: localStorage.getItem('adminToken'),
+  token: localStorage.getItem("adminToken"),
   user: null,
   isLoading: false,
   error: null,
 };
 
 export const login = createAsyncThunk(
-  'auth/login',
+  "auth/login",
   async ({ email, password }: { email: string; password: string }) => {
-    const response = await api.post('/auth/login', { email, password });
-    localStorage.setItem('adminToken', response.data.token);
+    const response = await api.post("/auth/login", { email, password });
+    localStorage.setItem("adminToken", response.data.token);
     return response.data;
   }
 );
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     logout: (state) => {
       state.token = null;
       state.user = null;
-      localStorage.removeItem('adminToken');
+      localStorage.removeItem("adminToken");
     },
   },
   extraReducers: (builder) => {
@@ -47,10 +47,10 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || 'Login failed';
+        state.error = action.error.message || "Login failed";
       });
   },
 });
 
 export const { logout } = authSlice.actions;
-export default authSlice.reducer; 
+export default authSlice.reducer;

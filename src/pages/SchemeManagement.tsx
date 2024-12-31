@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { schemes } from '@/services/api';
+import { schemes } from '@/services/schemesService';
 import { Scheme } from '@/types';
 import SchemeForm from '@/components/schemes/SchemeForm';
 import SchemeList from '@/components/schemes/SchemeList';

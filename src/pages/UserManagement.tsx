@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from 'react-query';
-import { users } from '@/services/api';
+import { users } from '@/services/usersService';
 import UserList from '@/components/users/UserList';
 import UserDetails from '@/components/users/UserDetails';
 import { User } from '@/types';

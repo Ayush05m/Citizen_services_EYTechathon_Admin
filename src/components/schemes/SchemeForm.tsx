@@ -54,8 +54,7 @@ export default function SchemeForm({ scheme, onSubmit, onClose }: SchemeFormProp
               <div className="text-red-500 text-sm">{formik.errors.title}</div>
             )}
           </div>
-
-          {/* Add other form fields similarly */}
+          
 
           <div className="flex justify-end gap-4">
             <button

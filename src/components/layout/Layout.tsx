@@ -66,7 +66,7 @@ export default function Layout() {
         {/* Static sidebar for desktop */}
         <Sidebar />
 
-        <div className="lg:pl-72">
+        <div className="lg:pl-52">
           <Header setSidebarOpen={setSidebarOpen} />
 
           <main className="py-10">

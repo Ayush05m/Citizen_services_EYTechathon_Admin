@@ -1,6 +1,8 @@
 import { useQuery } from 'react-query';
 import { UsersIcon, DocumentDuplicateIcon, DocumentIcon } from '@heroicons/react/24/outline';
-import { users, schemes, documents } from '@/services/api';
+import { users } from '@/services/usersService';
+import { schemes } from '@/services/schemesService';
+import { documents } from '@/services/documentsService';
 
 export default function Dashboard() {
   const { data: userCount } = useQuery('userCount', () => users.getCount());

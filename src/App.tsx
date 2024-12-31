@@ -9,6 +9,7 @@ import UserManagement from './pages/UserManagement';
 import AIModelManagement from './pages/AIModelManagement';
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
+import { AddScheme } from './pages/AddScheme';
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ function App() {
               <Route path="/schemes" element={<SchemeManagement />} />
               <Route path="/users" element={<UserManagement />} />
               <Route path="/ai-models" element={<AIModelManagement />} />
+              <Route path="/add-scheme" element={<AddScheme />} />
             </Route>
           </Routes>
         </Router>

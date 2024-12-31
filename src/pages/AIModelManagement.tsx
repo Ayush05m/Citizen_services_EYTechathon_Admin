@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { aiModels } from '@/services/api';
+import { aiModels } from '@/services/aiModelsService';
 // import ModelForm from '@/components/ai/ModelForm';
 // import ModelList from '@/components/ai/ModelList';
 
