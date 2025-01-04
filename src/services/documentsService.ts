@@ -7,7 +7,13 @@ export const documents = {
     return response.data;
   },
   getCount: async () => {
-    const response = await api.get<{ count: number }>("/documents/count");
+    const response = (
+      await api.get<{ message: string; data: { count: number } }>(
+        "/documents/count"
+      )
+    ).data;
+    // console.log(response);
+
     return response.data.count;
   },
   verify: async (

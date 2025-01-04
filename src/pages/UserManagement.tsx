@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { useQuery } from 'react-query';
-import { users } from '@/services/usersService';
-import UserList from '@/components/users/UserList';
-import UserDetails from '@/components/users/UserDetails';
-import { User } from '@/types';
+import { useState } from "react";
+import { useQuery } from "react-query";
+import { users } from "@/services/usersService";
+import UserList from "@/components/users/UserList";
+import UserDetails from "@/components/users/UserDetails";
+import { User } from "@/types";
 
 export default function UserManagement() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const { data: userList, isLoading } = useQuery('users', users.getAll);
+  const { data: userList, isLoading } = useQuery("users", users.getAll);
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -19,10 +19,7 @@ export default function UserManagement() {
 
       <div className="grid grid-cols-3 gap-6">
         <div className="col-span-2">
-          <UserList
-            users={userList || []}
-            onSelect={setSelectedUser}
-          />
+          <UserList selectedUsers={userList || []} onSelect={setSelectedUser} />
         </div>
         <div>
           {selectedUser && (
@@ -35,4 +32,4 @@ export default function UserManagement() {
       </div>
     </div>
   );
-} 
+}

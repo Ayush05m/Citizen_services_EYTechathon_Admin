@@ -1,13 +1,26 @@
 import { User } from "@/types";
 import api from "./api";
 
+export interface userApiResponse {
+  users: User[];
+  pagination: { total: number; page: number; pages: number };
+}
+
 export const users = {
   getAll: async () => {
-    const response = await api.get<User[]>("/users");
+    const response = await api.get<userApiResponse>("/users");
+    console.log(response);
+
     return response.data;
   },
   getCount: async () => {
-    const response = await api.get<{ count: number }>("/users/count");
+    const response = (
+      await api.get<{
+        message: string;
+        data: { count: number };
+      }>("/users/count")
+    ).data;
+
     return response.data.count;
   },
   getById: async (id: string) => {

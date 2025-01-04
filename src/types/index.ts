@@ -15,14 +15,16 @@ export interface User {
 }
 
 export interface Scheme {
-  id: string;
-  title: string;
-  description: string;
+  _id: string;
+  name: string;
+  details: string;
   eligibilityCriteria: string[];
   requiredDocuments: string[];
-  benefits: string[];
+  benefits: string;
   applicationDeadline?: string;
-  category: 'education' | 'health' | 'housing' | 'employment' | 'other';
+  applicationProcess: string[];
+  exclusion?: string[];
+  category: "education" | "health" | "housing" | "employment" | "other";
   createdAt: string;
   updatedAt: string;
 }
@@ -31,7 +33,7 @@ export interface Document {
   id: string;
   user: string | User;
   type: string;
-  status: 'pending' | 'verified' | 'rejected';
+  status: "pending" | "verified" | "rejected";
   url: string;
   verificationDetails?: {
     verifiedAt: string;
@@ -45,8 +47,8 @@ export interface Document {
 export interface AIModel {
   id: string;
   name: string;
-  type: 'document-verification' | 'eligibility-check';
-  status: 'training' | 'ready' | 'error';
+  type: "document-verification" | "eligibility-check";
+  status: "training" | "ready" | "error";
   configuration: Record<string, any>;
   metrics?: {
     accuracy: number;
@@ -56,4 +58,4 @@ export interface AIModel {
   lastTrained?: string;
   createdAt: string;
   updatedAt: string;
-} 
+}

@@ -13,7 +13,7 @@ export default function SchemeList({ schemes, onEdit, onDelete }: SchemeListProp
         <thead className="bg-gray-50">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Title
+              Name
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Category
@@ -28,10 +28,10 @@ export default function SchemeList({ schemes, onEdit, onDelete }: SchemeListProp
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {schemes.map((scheme) => (
-            <tr key={scheme.id}>
+            <tr key={scheme._id}>
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm font-medium text-gray-900">{scheme.title}</div>
-                <div className="text-sm text-gray-500">{scheme.description}</div>
+                <div className="text-sm font-medium text-gray-900">{scheme.name}</div>
+                <div className="text-sm text-gray-500">{scheme.details.slice(0,30)}</div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
@@ -49,7 +49,7 @@ export default function SchemeList({ schemes, onEdit, onDelete }: SchemeListProp
                   Edit
                 </button>
                 <button
-                  onClick={() => onDelete(scheme.id)}
+                  onClick={() => onDelete(scheme._id)}
                   className="text-red-600 hover:text-red-900"
                 >
                   Delete

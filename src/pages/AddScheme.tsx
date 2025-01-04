@@ -1,11 +1,12 @@
-import React, { useRef, useState, useMemo, useEffect } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import JoditEditor from "jodit-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import AutoExpandingTextarea from "@/components/AutoExpandingTextArea";
 import { X } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import api from "@/services/api";
 import {
   Select,
   SelectContent,
@@ -14,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
+import FieldList from "@/components/schemes/FieldList";
 
 export const AddScheme = () => {
   const navigate = useNavigate();
@@ -75,78 +77,6 @@ export const AddScheme = () => {
     setter(newFields);
   };
 
-  // Add this utility function near the top of your component
-  const AutoExpandingTextarea = ({ value, onChange, className, ...props }: any) => {
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-    useEffect(() => {
-      if (textareaRef.current) {
-        textareaRef.current.style.height = 'auto';
-        textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
-      }
-    }, [value]);
-
-    return (
-      <Textarea
-        ref={textareaRef}
-        value={value}
-        onChange={onChange}
-        className={`min-h-[60px] overflow-hidden ${className}`}
-        {...props}
-      />
-    );
-  };
-
-  // Field list component
-  const FieldList = ({
-    title,
-    fields,
-    setFields,
-    id,
-    addButtonText = "Add New",
-  }: {
-    title: string;
-    fields: string[];
-    setFields: React.Dispatch<React.SetStateAction<string[]>>;
-    id: string;
-    addButtonText?: string;
-  }) => (
-    <Card className="w-full">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-        <CardTitle className="text-lg font-bold">{title}</CardTitle>
-        <Button
-          onClick={() => handleAddField(setFields, fields)}
-          variant="outline"
-        >
-          {addButtonText}
-        </Button>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {fields.map((field, idx) => (
-          <div key={idx} className="flex gap-2 items-start">
-            <span className="mt-2 w-8 text-sm text-gray-500">{idx + 1}.</span>
-            <AutoExpandingTextarea
-              id={`${id}-${idx}`}
-              value={field}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                handleChangeField(idx, e.target.value, setFields, fields)
-              }
-              className="flex-1"
-            />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-red-500 hover:text-red-700"
-              onClick={() => handleRemoveField(idx, setFields, fields)}
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-        ))}
-      </CardContent>
-    </Card>
-  );
-
   const handleSubmit = async () => {
     try {
       const schemeData = {
@@ -163,17 +93,8 @@ export const AddScheme = () => {
 
       console.log(schemeData);
 
-      //   const response = await fetch('/api/schemes', {
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify(schemeData),
-      //   });
-
-      //   if (!response.ok) {
-      //     throw new Error('Failed to create scheme');
-      //   }
+      const response = await api.post("/schemes", schemeData);
+      console.log(response);
 
       // Navigate back to schemes list or show success message
       navigate("/schemes");
