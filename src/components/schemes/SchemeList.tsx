@@ -1,4 +1,5 @@
-import { Scheme } from '@/types';
+import { Scheme } from "@/types";
+import { useNavigate } from "react-router-dom";
 
 interface SchemeListProps {
   schemes: Scheme[];
@@ -7,6 +8,7 @@ interface SchemeListProps {
 }
 
 export default function SchemeList({ schemes, onEdit, onDelete }: SchemeListProps) {
+  const navigate = useNavigate();
   return (
     <div className="bg-white shadow rounded-lg">
       <table className="min-w-full divide-y divide-gray-200">
@@ -27,38 +29,52 @@ export default function SchemeList({ schemes, onEdit, onDelete }: SchemeListProp
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {schemes.map((scheme) => (
-            <tr key={scheme._id}>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm font-medium text-gray-900">{scheme.name}</div>
-                <div className="text-sm text-gray-500">{scheme.details.slice(0,30)}</div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                  {scheme.category}
-                </span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {scheme.applicationDeadline ? new Date(scheme.applicationDeadline).toLocaleDateString() : 'No deadline'}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <button
-                  onClick={() => onEdit(scheme)}
-                  className="text-indigo-600 hover:text-indigo-900 mr-4"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => onDelete(scheme._id)}
-                  className="text-red-600 hover:text-red-900"
-                >
-                  Delete
-                </button>
+          {schemes.length === 0 ? (
+            <tr>
+              <td colSpan={4} className="px-6 py-4 text-center text-gray-500">
+                No schemes available.
               </td>
             </tr>
-          ))}
+          ) : (
+            schemes.map((scheme) => (
+              <tr key={scheme._id}>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm font-medium text-gray-900">
+                    {scheme.name}
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {scheme.details.slice(0, 30)}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                    {scheme.category}
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {scheme.applicationDeadline
+                    ? new Date(scheme.applicationDeadline).toLocaleDateString()
+                    : "No deadline"}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <button
+                    onClick={() => onEdit(scheme)}
+                    className="text-indigo-600 hover:text-indigo-900 mr-4"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => onDelete(scheme._id)}
+                    className="text-red-600 hover:text-red-900"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>
   );
-} 
+}

@@ -2,10 +2,8 @@ import api from "./api";
 import { Scheme } from "@/types";
 
 export const schemes = {
-  getAll: async () => {
-    const response = await api.get<Scheme[]>("/schemes");
-    console.log(response);
-
+  getAll: async (): Promise<Scheme[]> => {
+    const response = await api.get("/schemes");
     return response.data;
   },
   getCount: async () => {
@@ -24,7 +22,7 @@ export const schemes = {
     const response = await api.put<Scheme>(`/schemes/${_id}`, scheme);
     return response.data;
   },
-  delete: async (id: string) => {
+  delete: async (id: string): Promise<void> => {
     await api.delete(`/schemes/${id}`);
   },
 };

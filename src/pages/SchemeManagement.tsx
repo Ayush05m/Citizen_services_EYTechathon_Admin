@@ -3,16 +3,32 @@ import { schemes } from "@/services/schemesService";
 import { Scheme } from "@/types";
 import SchemeList from "@/components/schemes/SchemeList";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function SchemeManagement() {
-  const { data: schemeList, isLoading } = useQuery("schemes", schemes.getAll);
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const handleEdit = (scheme: Scheme) => {};
+  const { data: schemeList, isLoading } = useQuery("schemes", schemes.getAll);
+
+  const deleteMutation = useMutation((id: string) => schemes.delete(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("schemes");
+      toast.success("Scheme deleted successfully");
+    },
+    onError: (error) => {
+      toast.error("Failed to delete scheme");
+      console.error("Delete error:", error);
+    },
+  });
+
+  const handleEdit = (scheme: Scheme) => {
+    navigate(`/edit-scheme/${scheme._id}`);
+  };
 
   const handleDelete = (id: string) => {
     if (window.confirm("Are you sure you want to delete this scheme?")) {
-      // deleteMutation.mutate(id);
+      deleteMutation.mutate(id);
     }
   };
 
@@ -33,7 +49,7 @@ export default function SchemeManagement() {
           onEdit={handleEdit}
           onDelete={handleDelete}
         />
-      ): (
+      ) : (
         <p>No Schemes Available</p>
       )}
     </div>

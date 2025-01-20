@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from "react";
+import React, { useRef, useState, useMemo, useEffect } from "react";
 import JoditEditor from "jodit-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -14,10 +14,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import FieldList from "@/components/schemes/FieldList";
 
-export const AddScheme = () => {
+interface AddSchemeProps {
+  mode: string; // Define the type for mode
+}
+
+export const AddScheme = ({ mode }: AddSchemeProps) => {
   const navigate = useNavigate();
   const editor = useRef(null);
   const [formData, setFormData] = useState({
@@ -27,14 +31,16 @@ export const AddScheme = () => {
     applicationDeadline: "",
     benefits: "",
   });
-
-  const [eligibilityFields, setEligibilityFields] = useState<string[]>([""]);
+  const [eligibilityFields, setEligibilityFields] = useState<string[]>([]);
   const [applicationProcessSteps, setApplicationProcessSteps] = useState<
     string[]
-  >([""]);
-  const [exclusions, setExclusions] = useState<string[]>([""]);
-  const [requiredDocuments, setRequiredDocuments] = useState<string[]>([""]);
+  >([]);
+  const [exclusions, setExclusions] = useState<string[]>([]);
+  const [requiredDocuments, setRequiredDocuments] = useState<string[]>([]);
   const [exclusionBool, setExclusionBool] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const { id } = useParams();
 
   const config = useMemo(
     () => ({
@@ -104,9 +110,48 @@ export const AddScheme = () => {
     }
   };
 
+  useEffect(() => {
+    if (id) {
+      api
+        .get(`/schemes/${id}`)
+        .then((response) => {
+          const data = response.data.data.scheme;
+          setFormData({
+            name: data.name,
+            details: data.details || "",
+            category: data.category || "",
+            applicationDeadline: data.applicationDeadline || "",
+            benefits: data.benefits || "",
+          });
+          // console.log(formData);
+          setEligibilityFields(data.eligibilityCriteria);
+          setRequiredDocuments(data.requiredDocuments);
+          setApplicationProcessSteps(data.applicationProcess);
+          setExclusions(data.exclusions);
+          console.log(exclusions);
+
+          if (exclusions?.length != 0) setExclusionBool(true);
+
+          setLoading(false); // Set loading to false after data is fetched
+          console.log(response.data.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching scheme data:", error);
+          setLoading(false); // Ensure loading is false even on error
+        });
+    } else {
+      setLoading(false); // If no id, set loading to false immediately
+    }
+  }, [id]);
+
+  if (loading) {
+    return <div>Loading...</div>; // Show loading state
+  }
+
   return (
     <div className="container mx-auto py-6 space-y-6">
       <h1 className="text-3xl font-bold">Add New Scheme</h1>
+      <p></p>
 
       <Card>
         <CardHeader>
@@ -236,7 +281,7 @@ export const AddScheme = () => {
         </CardHeader>
         {exclusionBool && (
           <CardContent className="space-y-4">
-            {exclusions.map((field, idx) => (
+            {exclusions?.map((field, idx) => (
               <div key={idx} className="flex gap-2 items-start">
                 <span className="mt-2 w-8 text-sm text-gray-500">
                   {idx + 1}.
@@ -273,7 +318,9 @@ export const AddScheme = () => {
         <Button variant="outline" onClick={() => navigate("/schemes")}>
           Cancel
         </Button>
-        <Button onClick={handleSubmit}>Save Scheme</Button>
+        <Button onClick={handleSubmit}>
+          {mode == "add" ? "Save" : "Update"} Scheme
+        </Button>
       </div>
     </div>
   );
